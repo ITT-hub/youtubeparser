@@ -11,17 +11,20 @@ The Youtube video parser will allow you to easily select the video information o
 
 ```php 
 // Initialize application
-$tube    = YouTubeParse::init("Your YouTube API key");
+$tube    = YouTubeParse::init("Your YouTube API key", 30);
 
 // Get channel playlists
 $chanels = $tube->chanel("YouTube channel ID");
+echo '<h1>Channel playlists '.$chanels->items[0]->snippet->channelTitle.'</h1>';
+echo "<pre>";
+print_r($chanels);
+echo "</pre>";
+
+echo '<h1>Playlist video '.$chanels->items[0]->snippet->title.'</h1>';
 
 // Get video playlists
-for($i=0; $i<$chanels->pageInfo->totalResults; $i++)
-{
-    echo "<h3>Page ".$i."</h3>";
-    echo '<pre>';
-    print_r($tube->video($chanels->items[$i]->id));
-    echo '</pre>';
-}
+$video = $tube->video($chanels->items[0]->id);
+echo "<pre>";
+print_r($video);
+echo "</pre>";
 ```

@@ -14,26 +14,30 @@ namespace ITTechnology\Tube;
 class YouTubeParse
 {
     /**
+     * @var int Выдавать позиций
+     */
+    private $max;
+    /**
      * Youtube ключь API
      */
     private $key = null;
-
     /**
      * YouTubeParse constructor.
      * @param string $key Youtube ключь API
      */
-    public function __construct(string $key)
+    public function __construct(string $key, int $max)
     {
         $this->key = $key;
+        $this->max = $max;
     }
 
     /**
      * @param string $key Youtube ключь API
      * @return YouTubeParse
      */
-    public static function init(string $key)
+    public static function init(string $key, int $max)
     {
-        return new self($key);
+        return new self($key, $max);
     }
 
     /**
@@ -43,7 +47,10 @@ class YouTubeParse
      */
     public function chanel(string $name): object
     {
-        $url = "https://www.googleapis.com/youtube/v3/playlists?channelId=".$name."&key=".$this->key;
+        $url = "https://www.googleapis.com/youtube/v3/playlists?part=snippet"
+            . "&channelId=".$name
+            . "&maxResults=".$this->max
+            . "&key=".$this->key;
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -66,6 +73,7 @@ class YouTubeParse
     {
         $url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet'
             . '&playlistId='.$playlist
+            . '&maxResults='.$this->max
             . '&key='.$this->key;
 
         $ch = curl_init();
