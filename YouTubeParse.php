@@ -41,11 +41,35 @@ class YouTubeParse
     }
 
     /**
+     * Информация о канале
+     * @param string $chanel_id идентификатор канала
+     * @return mixed
+     */
+    public function chanel(string $chanel_id)
+    {
+        $url = "https://www.googleapis.com/youtube/v3/channels?part=snippet"
+            . "&id=".$chanel_id
+            . "&maxResults=".$this->max
+            . "&key=".$this->key;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $responce = curl_exec($ch);
+        if(curl_error($ch)) {
+            echo curl_error($ch);
+        }
+        curl_close($ch);
+
+        return json_decode($responce);
+    }
+
+    /**
      * Вернуть плейлисты канала Ютуб
      * @param string $name Канал Ютуб
      * @return object
      */
-    public function chanel(string $name): object
+    public function playlists(string $name): object
     {
         $url = "https://www.googleapis.com/youtube/v3/playlists?part=snippet"
             . "&channelId=".$name
